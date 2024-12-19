@@ -9,6 +9,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -20,18 +21,70 @@
         @endif
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-    <h1>Welcome to Coalition Test</h1>
+    <div class="container"><h1>Welcome to Coalition Test</h1></div>
     
-        <p>
+        <div class="container">
             <form method="POST" action="/store"">
                 @csrf
-                @method('PUT')
-            <p>    
-                <label>
-            </p>
+                 
+            <div class="form-group">    
+                <label>Title</label>
+                <input type="text" id="productName" name="productName" class="form-control @error('name') is-invlaid @enderror" />
+                @error('name')
+                    <div class="alert alert-danger">{{$message}}</div>
+                @enderror
+            </div>
+            <div class="form-group">    
+                <label>Quantity in Stock</label>
+                <input  type="number" name="quantity"  id="quantity" class="form-control @error('quantity') is-invlaid @enderror" />
+                @error('quantity')
+                    <div class="alert alert-danger">{{$message}}</div>
+                @enderror
+            </div>
+            <div class="form-group">  
+                <label>Product Price</label>
+                <input type="number" name="price" id="price" class="form-control @error('price') is-invlaid @enderror" />
+                @error('price')
+                    <div class="alert alert-danger">{{$message}}</div>
+                @enderror
+            </div>
+            <div class="form-group">   
+                <label>Quantity in Stock</label>
+                 <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
             </form>
 
-        </p>
+        </div>
+        <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Prduct Name</th>
+                    <th>Quantity in Stock</th>
+                    <th>Price per item</th>
+                    <th>Date Time</th>
+                    <th>Total Value</th>
+                    
+                </tr>
+            </thead>
+            @php 
+                $total = 0;
+            @endphp
+            @foreach ($products as $product)
+            <tr>
+                <td>{{$product['productName']}}</td>
+                <td>{{$product['quantity']}}</td>
+                <td>{{$product['price']}}</td>
+                <td>{{$product['Datetime']}}</td>
+                <td>{{$product['price'] * $product['quantity']}}</td>
+            </tr>
+            @php 
+                $total += $product['price'] * $product['quantity'];
+            @endphp
+            @endforeach
+            <tr><td colspan="4">Total Sum:</td><td>{{$total}}</td></tr>
+        </table>
+    </div>
 
     </body>
 </html>
